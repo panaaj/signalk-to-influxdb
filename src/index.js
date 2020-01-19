@@ -18,7 +18,7 @@ const debug = require('debug')('signalk-to-influxdb')
 const util = require('util')
 const skToInflux = require('./skToInflux')
 
-import {registerHistoryAPI} from './HistoryAPI'
+import {registerHistoryApiRoute} from './HistoryAPI'
 
 module.exports = function (app) {
   const logError = app.error || ((err) => {console.error(err)})
@@ -391,7 +391,6 @@ module.exports = function (app) {
       router.get('/self/track', trackHandler)
       router.get('/vessels/self/track', trackHandler)
       router.get('/vessels/' + app.selfId + '/track', trackHandler)
-      registerHistoryAPI(router, clientP)
       return router
     },
 
@@ -445,6 +444,10 @@ module.exports = function (app) {
       getHistory(startTime, date, pathElements, (deltas) => {
         cb(deltas)
       })
+    },
+
+    registerHistoryApiRoute: (router) => {
+      registerHistoryApiRoute(router, clientP)
     }
   }
   return plugin
